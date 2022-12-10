@@ -1,0 +1,12 @@
+query listVenueStaff($listVenueStaffArgs: ListVenueStaffArgs!) {
+    listVenueStaff(listVenueStaffArgs: $listVenueStaffArgs) {
+        count
+        venueStaffs {
+            id
+            name
+            phone
+            position
+            email
+        }
+    }
+}

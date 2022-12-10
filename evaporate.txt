@@ -1,0 +1,73 @@
+import Evaporate from 'evaporate';
+import { IObjectKeys } from '../types/global.types';
+import AS from 'aws-sdk';
+async function uploadDocumentWithSignerToAWS(options: IObjectKeys = {}, uploadProgress: Function) {
+    const { dir = '', filePrefix, withUserFullName, callback } = options;
+    let { file } = options;
+    const AWS: IObjectKeys = AS;
+    console.log(process.env.AWS_SIGNER_URL);
+    const config: any = {
+        signerUrl: process.env.NEXT_PUBLIC_AWS_SIGNER_URL,
+        aws_key: process.env.NEXT_PUBLIC_AWS_ACCESS_KEY_ID,
+        bucket: outerloop-questionpro,
+        awsRegion: process.env.NEXT_PUBLIC_AWS_REGION,
+        cloudfront: true,
+        computeContentMd5: true,
+        cryptoMd5Method: (data: IObjectKeys) => AWS.util.crypto.md5(data, 'base64'),
+        cryptoHexEncodedHash256: (data: IObjectKeys) => AWS.util.crypto.sha256(data, 'hex'),
+    };
+    const fileNameParams = file.name.split('.');
+    const extension = fileNameParams.pop();
+    const timestamp = Date.now();
+    let fileName = ${filePrefix ? ${filePrefix}- : 'file-'}${timestamp}.${extension};
+    if (withUserFullName) {
+        fileName = ${filePrefix ? ${filePrefix}- : ''}${withUserFullName}.${extension};
+    }
+    let type = file.type.split('/').slice(-1)[0];
+    if (type === 'pdf') {
+        type = 'octet-stream';
+    }
+    const properties = {
+        name: ${dir}/${fileName},
+        file,
+        contentType: application/${type},
+        xAmzHeadersAtInitiate: { 'x-amz-acl': 'public-read' },
+    };
+    const evaporate = await Evaporate.create(config);
+    await evaporate.add({
+        ...properties,
+        complete: _xhr => {
+            const { responseURL } = _xhr;
+            const [URL] = responseURL.split('?');
+            if (typeof callback === 'function') {
+                callback(URL);
+            }
+        },
+        error: err => {
+            console.log('ERROR >>> ', err);
+        },
+        warn: err => {
+            console.log('WARNING >>> ', err);
+        },
+        progress: (progressValue, stats) => {
+            const progress = Math.round(((stats.fileSize - stats.remainingSize) * 100) / stats.fileSize);
+            uploadProgress({ progress, name: file.name });
+        },
+    });
+}
+export async function uploadDocumentToAWS(options: IObjectKeys = {}): Promise<{ url: string; fileName: string | undefined }> {
+    const { uploadProgress, ...rest } = options;
+    let dir: any = [];
+    dir = dir.join('/');
+    return new Promise(resolve => {
+        const OPTIONS = {
+            ...rest,
+            dir,
+            callback: (url: string) => {
+                const fileName = url.split('/').pop();
+                resolve({ url, fileName });
+            },
+        };
+        uploadDocumentWithSignerToAWS(OPTIONS, uploadProgress);
+    });
+}

@@ -1,0 +1,15 @@
+@import "styles/mixin";
+.main {
+  flex: 1;
+}
+.header_heat {
+  height: 40px;
+  line-height: 40px;
+  background-color: black;
+  font-size: 12px;
+  text-align: center;
+  p {
+    @include line-clamp(1);
+    color: white;
+  }
+}

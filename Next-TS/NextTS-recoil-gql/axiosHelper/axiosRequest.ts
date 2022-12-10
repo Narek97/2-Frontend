@@ -1,0 +1,50 @@
+import axios, {AxiosRequestHeaders} from 'axios';
+
+const apiClient = axios.create({baseURL: 'https://api.staging.hotspotz.uk/'});
+
+export const axiosRequest = <TData, TVariables>(
+    query: string,
+    headers?: AxiosRequestHeaders,
+): ((variables?: TVariables) => Promise<TData>) =>
+    async (variables?: TVariables) =>
+        apiClient
+            .post<{ data: TData; errors: any }>(
+                '',
+                {
+                    query,
+                    variables,
+                },
+                {headers: headers},
+            )
+            .then(res => {
+                if (res.data.errors) {
+                    throw new Error(res.data.errors[0].message);
+                }
+                return res.data.data;
+            });
+
+apiClient.interceptors.request.use(
+    function (config) {
+        if (config.headers) {
+            config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiZW1haWwiOiJhZG1pbmFkbWluQGdtYWlsLmNvbSIsImlhdCI6MTY2NjQ1OTU0NCwiZXhwIjoxNjc0MjM1NTQ0fQ.B-IcBKIwNm9goWAowO6qJuSwYvYPXObVaFXnh0xvbRc`;
+            // config.headers.Mode = APP_ENV.MODE;
+        }
+        return config;
+    },
+    function (error) {
+        console.warn('Errrr', error);
+        //TODO handle some errors
+        return Promise.reject(error);
+    },
+);
+
+apiClient.interceptors.response.use(function (response) {
+    if (
+        response.data.hasOwnProperty('errors') &&
+        response.data.errors[0]?.extensions.response?.statusCode === 401
+    ) {
+        // logOut(true);
+        // return Promise.reject(response.data.errors[0].extensions.response.message);
+    }
+    return response;
+});

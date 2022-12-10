@@ -1,0 +1,19 @@
+@mixin flex_center() {
+  display: flex;
+  text-align: center;
+  justify-content: center;
+}
+
+@mixin absolute_center() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin line-clamp($clamp) {
+  display: -webkit-box;
+  -webkit-line-clamp: $clamp;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

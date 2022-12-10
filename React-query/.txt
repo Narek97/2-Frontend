@@ -1,0 +1,60 @@
+overwrite: true
+schema: http://localhost:5001/graphql
+watch: true
+generates:
+  src/api/query/types.ts:
+    documents: 'src/**/*.graphql'
+    plugins:
+      - 'typescript'
+      - 'typescript-operations'
+  # ///////////////
+  src/api/query/study.ts:
+    documents: 'src/query/study.graphql'
+    plugins:
+      - 'typescript-react-query'
+    config:
+      exposeQueryKeys: true
+      exposeDocument: true
+      skipTypename: true
+      fetcher:
+        func: '../axiosHelper#axiosRequest'
+        isReactHook: true
+    preset: import-types-preset
+    presetConfig:
+      typesPath: './types'
+  #///////////////
+  src/api/query/user.ts:
+    documents: 'src/query/user.graphql'
+    plugins:
+      - 'typescript-react-query'
+    config:
+      exposeQueryKeys: true
+      exposeDocument: true
+      skipTypename: true
+      fetcher:
+        func: '../axiosHelper#axiosRequest'
+        isReactHook: true
+    preset: import-types-preset
+    presetConfig:
+      typesPath: './types'
+  # ///////////////
+  src/api/query/folders.ts:
+    documents: 'src/query/folders.graphql'
+    plugins:
+      - 'typescript-react-query'
+    config:
+      exposeQueryKeys: true
+      exposeDocument: true
+      skipTypename: true
+      fetcher:
+        func: '../axiosHelper#axiosRequest'
+        isReactHook: true
+    preset: import-types-preset
+    presetConfig:
+      typesPath: './types'
+  #///////////////
+  ./graphql.schema.json:
+    plugins:
+      - 'introspection'
+
+

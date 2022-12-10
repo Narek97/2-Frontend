@@ -1,0 +1,5 @@
+@import "../styles/mixin";
+
+.not_found_page {
+  @include absolute_center();
+}

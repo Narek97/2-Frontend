@@ -1,0 +1,14 @@
+query getAppUsers($getAppUsersArgs: GetAppUsersArgs!) {
+    getAppUsers(getAppUsersArgs: $getAppUsersArgs) {
+        count
+        users {
+            id
+            name
+            email
+            hashtags {
+                hashtagId
+                name
+            }
+        }
+    }
+}

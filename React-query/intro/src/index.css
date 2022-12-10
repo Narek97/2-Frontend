@@ -1,0 +1,43 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.main {
+  padding: 40px;
+}
+
+.header {
+  width: 100%;
+  height: 40px;
+  padding: 0 40px;
+  margin-bottom: 20px;
+  background-color: #e7e7e7;
+  border-bottom: 1px solid;
+}
+
+ul {
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+li, a {
+  text-decoration: none;
+  list-style-type: none;
+  color: #ff0027;
+}
+
+button {
+  margin: 20px 0;
+}
+
+.hero-link {
+  margin: 4px 0;
+}
+
+.colors {
+  margin: 20px 0;
+}

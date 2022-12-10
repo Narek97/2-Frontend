@@ -1,0 +1,51 @@
+overwrite: true
+schema: 'https://rickandmortyapi.com/graphql'
+documents: 'src/**/*.graphql'
+
+#generates:
+#  src/graphql/types.tsx:
+#    - typescript
+#  src/graphql/:
+#    preset:
+#      # near-operation-file
+#      import-types
+#    presetConfig:
+#      # extension: .generated.tsx
+#      # baseTypesPath: types.ts
+#      typesPath: types.ts
+#    plugins:
+#      - typescript
+#      - typescript-operations
+#      - typescript-react-query
+#    config:
+#      withHOC: true
+#      withHooks: true
+#      skipTypename: true
+
+#generates:
+#  src/generated/index.ts:
+#    plugins:
+#      - typescript
+#      - typescript-operations
+#      - typescript-react-query
+#    config:
+#      fetcher:
+#        endpoint: 'https://rickandmortyapi.com/graphql'
+
+generates:
+  types/__generated__/types.ts:
+    plugins:
+      - "typescript"
+  ovrlib/graphql/:
+    preset: near-operation-file
+    presetConfig:
+      baseTypesPath: ../../types/__generated__/types.ts
+    plugins:
+      - "typescript-operations"
+      - "typescript-react-query"
+    config:
+      documentMode: external #documentNodeImportFragments
+      importDocumentNodeExternallyFrom: near-operation-file
+      reactApolloVersion: 2
+      fetcher:
+        endpoint: 'https://rickandmortyapi.com/graphql'

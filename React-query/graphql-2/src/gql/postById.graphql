@@ -1,0 +1,33 @@
+#query GetCharacterById($id: ID!){
+#    character(id: $id){
+#        id
+#        name
+#        status
+#        type
+#        gender
+#        origin {
+#            id
+#            name
+#        }
+#        location {
+#            id
+#            name
+#        }
+#        image
+#    }
+#}
+
+query getAppUsers($getAppUsersArgs: GetAppUsersArgs!) {
+    getAppUsers(getAppUsersArgs: $getAppUsersArgs) {
+        count
+        users {
+            id
+            name
+            email
+            hashtags {
+                hashtagId
+                name
+            }
+        }
+    }
+}
